@@ -32,7 +32,7 @@ cargo build --release
 
 ### Linux x86_x64
 
-In order to get stuff working later, use the `nightly` branch of Rust:
+To get stuff working later, use the `nightly` branch of Rust:
 
 ```bash
 rustup override set nightly
@@ -64,23 +64,17 @@ To encode `Hello World` using the `L` (up to ~7% damage):
 
 > ./target/release/qrcode-cli --output images/example1.svg --eclevel L "Hello World"
 
-Result:
-
 ![Example 1](images/example1.svg)
 
-To encode `Hello World` using the `H` (up to ~30% damage) with embedding of the original data:
+To encode `Hello World` using the `H` (up to ~30% damage) with the embedding of the original data:
 
 > ./target/release/qrcode-cli --output images/example2.svg --eclevel H --text "Hello World"
 
-Result:
-
 ![Example 2](images/example2.svg)
 
-To encode a long message `Hello World` using the `H` (up to ~30% damage) with embedding of the original data:
+To encode a long message `Hello World` using the `H` (up to ~30% damage) with the embedding of the original data:
 
 > ./target/release/qrcode-cli --output images/example3.svg --eclevel H --text "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-
-Result:
 
 ![Example 3](images/example3.svg)
 
