@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/lbeder/qrcode-cli.svg)](https://travis-ci.org/lbeder/qrcode-cli)
 
-QRCode Encoder CLI in Rust
+QR Code SVG Encoder CLI
 
 ## Usage
 
