@@ -67,7 +67,7 @@ fn parse_options() -> QRCodeOptions {
     let ec_level = matches
         .opt_str("e")
         .and_then(|o| ECLevel::from_str(&o).ok())
-        .unwrap_or(default_options.ec_level.clone());
+        .unwrap_or(default_options.ec_level);
 
     QRCodeOptions { ec_level }
 }
