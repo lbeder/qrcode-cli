@@ -7,7 +7,13 @@ mod qrcode;
 use crate::qrcode::{ECLevel, QRCode, QRCodeOptions};
 use getopts::Options;
 use std::str::FromStr;
-use std::{env, path::Path, process::exit};
+use std::{env, path::Path, path::PathBuf, process::exit};
+
+pub struct CLIOptions {
+    opts: QRCodeOptions,
+    data: Vec<u8>,
+    output: PathBuf,
+}
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
@@ -36,6 +42,7 @@ fn get_options() -> Options {
         ),
         "EC_LEVEL",
     );
+    opts.optopt("d", "data", "data to encode", "DATA");
     opts.optopt("o", "output", "output path for the image QR code", "OUTPUT");
     opts.optflag("t", "text", "embed the original data on the image QR code");
 
@@ -45,7 +52,7 @@ fn get_options() -> Options {
     opts
 }
 
-fn parse_options() -> (QRCodeOptions, String) {
+fn parse_options() -> CLIOptions {
     let opts = get_options();
     let args: Vec<String> = env::args().collect();
     let program = Path::new(&args[0]).file_name().unwrap().to_str().unwrap();
@@ -75,17 +82,32 @@ fn parse_options() -> (QRCodeOptions, String) {
         Some(o) => o,
         None => {
             print_usage(&program, &opts);
+            println!("Error: output path is missing!");
+            exit(0);
+        }
+    };
+
+    let data = match matches.opt_str("d") {
+        Some(o) => o,
+        None => {
+            print_usage(&program, &opts);
+            println!("Error: data is missing!");
             exit(0);
         }
     };
 
     let embed = matches.opt_present("t");
 
-    (QRCodeOptions { ec_level, embed: embed }, path)
+    CLIOptions {
+        opts: QRCodeOptions { ec_level, embed: embed },
+        data: data.as_bytes().to_vec(),
+        output: PathBuf::from(path),
+    }
 }
 
 fn main() {
-    let (opts, path) = parse_options();
+    let opts = parse_options();
 
-    print!("Options are: {:?}", opts);
+    let qr = QRCode::new(&opts.opts);
+    // Ask for data?
 }
