@@ -9,6 +9,7 @@ use std::fs::File;
 use std::io;
 use std::io::Write;
 use std::path::Path;
+use svgdom::{AttributeId, AttributeValue, Document, ElementId, NodeType, Transform};
 
 #[derive(PartialEq, Debug)]
 pub struct QRCodeOptions {
@@ -23,6 +24,13 @@ pub enum ECLevel {
     Q = 2,
     H = 3,
 }
+
+const MIN_SVG_DIMENSION: u32 = 500;
+const SVG_TEXT_X: f64 = 20.0;
+const SVG_TEXT_Y: f64 = 20.0;
+const SVG_TEXT_DY: f64 = 16.0;
+const SVG_FONT_FAMILY: &str = "monospace";
+const SVG_TEXT_LINE_LENGTH: usize = 64;
 
 impl From<ECLevel> for EcLevel {
     fn from(ec: ECLevel) -> Self {
@@ -57,11 +65,74 @@ impl<'a> QRCode<'a> {
         let code = QrCode::with_error_correction_level(data, EcLevel::from(self.opts.ec_level)).unwrap();
 
         // Render the bits into an image.
-        let image = code.render::<svg::Color>().build();
+        let mut svg = code
+            .render::<svg::Color>()
+            .min_dimensions(MIN_SVG_DIMENSION, MIN_SVG_DIMENSION)
+            .build();
+
+        // Embed the actual data.
+        if self.opts.embed {
+            svg = Self::embed_text(&mut svg, &data);
+        }
 
         // Save the SVG to file.
         let mut f = File::create(&path).unwrap();
-        f.write_all(image.as_bytes())
+        f.write_all(svg.as_bytes())
+    }
+
+    fn embed_text(svg: &String, data: &[u8]) -> String {
+        // Embed the actual data.
+        let mut doc = Document::from_str(&svg).unwrap();
+        let mut rect = doc
+            .root()
+            .descendants()
+            .find(|n| n.is_tag_name(ElementId::Rect))
+            .unwrap();
+
+        let mut el = doc.create_element(ElementId::Text);
+        el.set_attribute((AttributeId::X, SVG_TEXT_X));
+        el.set_attribute((AttributeId::Y, SVG_TEXT_Y));
+        el.set_attribute((AttributeId::FontFamily, SVG_FONT_FAMILY));
+
+        let mut text_height: f64 = SVG_TEXT_DY;
+        for line in data.chunks(SVG_TEXT_LINE_LENGTH) {
+            let mut tspan = doc.create_element(ElementId::Tspan);
+            tspan.set_attribute((AttributeId::X, SVG_TEXT_X));
+            tspan.set_attribute((AttributeId::Dy, SVG_TEXT_DY));
+            text_height += SVG_TEXT_DY;
+
+            let value = doc.create_node(NodeType::Text, std::str::from_utf8(line).unwrap());
+            tspan.append(value);
+            el.append(tspan);
+        }
+
+        rect.insert_after(el.clone());
+
+        // Move the actual QR code below the text.
+        let mut path = doc
+            .root()
+            .descendants()
+            .find(|n| n.is_tag_name(ElementId::Path))
+            .unwrap();
+
+        // Make the SVG resizable by removing its "height" attributes.
+        path.set_attribute((AttributeId::Transform, Transform::new_translate(0.0, text_height)));
+
+        // Resize the whole SVG accordingly.
+        let mut root = doc.root().first_child().unwrap();
+        let mut height = 0.0;
+        if let Some(value) = root.attributes().get_value(AttributeId::Height) {
+            match *value {
+                AttributeValue::Length(ref len) => {
+                    height = len.num;
+                }
+                _ => {}
+            }
+        }
+
+        root.set_attribute((AttributeId::Height, height + text_height));
+
+        doc.to_string()
     }
 }
 
