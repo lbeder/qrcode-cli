@@ -12,7 +12,7 @@ use std::{env, path::Path, path::PathBuf, process::exit};
 pub struct CLIOptions {
     opts: QRCodeOptions,
     data: Vec<u8>,
-    output: PathBuf,
+    outputPath: PathBuf,
 }
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -101,7 +101,7 @@ fn parse_options() -> CLIOptions {
     CLIOptions {
         opts: QRCodeOptions { ec_level, embed: embed },
         data: data.as_bytes().to_vec(),
-        output: PathBuf::from(path),
+        outputPath: PathBuf::from(path),
     }
 }
 
@@ -109,5 +109,5 @@ fn main() {
     let opts = parse_options();
 
     let qr = QRCode::new(&opts.opts);
-    // Ask for data?
+    qr.encode(&opts.data, &opts.outputPath).unwrap();
 }
