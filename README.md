@@ -64,19 +64,25 @@ To encode `Hello World` using the `L` (up to ~7% damage):
 
 > ./target/release/qrcode-cli --output images/example1.svg --eclevel L "Hello World"
 
-![Example 1](images/example1.svg)
+<div align="center">
+  <img alt="example1" src="images/example1.svg" />
+</div>
 
 To encode `Hello World` using the `H` (up to ~30% damage) with the embedding of the original data:
 
 > ./target/release/qrcode-cli --output images/example2.svg --eclevel H --text "Hello World"
 
-![Example 2](images/example2.svg)
+<div align="center">
+  <img alt="example2" src="images/example2.svg" />
+</div>
 
 To encode a long message `Hello World` using the `H` (up to ~30% damage) with the embedding of the original data:
 
 > ./target/release/qrcode-cli --output images/example3.svg --eclevel H --text "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
-![Example 3](images/example3.svg)
+<div align="center">
+  <img alt="example3" src="images/example3.svg" />
+</div>
 
 ## License
 
