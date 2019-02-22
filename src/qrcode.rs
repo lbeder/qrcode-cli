@@ -1,14 +1,19 @@
 extern crate hex;
-extern crate image;
 extern crate qrcode;
 extern crate strum;
+extern crate svgdom;
 
 use qrcode::render::svg;
-use qrcode::{Color, EcLevel, QrCode};
+use qrcode::{EcLevel, QrCode};
+use std::fs::File;
+use std::io;
+use std::io::Write;
+use std::path::Path;
 
 #[derive(PartialEq, Debug)]
 pub struct QRCodeOptions {
     pub ec_level: ECLevel,
+    pub embed: bool,
 }
 
 #[derive(PartialEq, Debug, Display, EnumString, Copy, Clone)]
@@ -30,7 +35,10 @@ impl From<ECLevel> for EcLevel {
     }
 }
 
-const DEFAULT_OPTIONS: QRCodeOptions = QRCodeOptions { ec_level: ECLevel::M };
+const DEFAULT_OPTIONS: QRCodeOptions = QRCodeOptions {
+    ec_level: ECLevel::M,
+    embed: false,
+};
 
 pub struct QRCode<'a> {
     opts: &'a QRCodeOptions,
@@ -41,20 +49,19 @@ impl<'a> QRCode<'a> {
         QRCode { opts }
     }
 
-    pub fn default() -> Self {
-        Self::new(QRCode::default_options())
-    }
-
     pub fn default_options() -> &'static QRCodeOptions {
         &DEFAULT_OPTIONS
     }
 
-    pub fn encode_to_vec(&self, data: &[u8]) -> Vec<Color> {
-        self.encoder(data).to_colors()
-    }
+    pub fn encode(&self, data: &[u8], path: &Path) -> Result<(), io::Error> {
+        let code = QrCode::with_error_correction_level(data, EcLevel::from(self.opts.ec_level)).unwrap();
 
-    fn encoder(&self, data: &[u8]) -> QrCode {
-        QrCode::with_error_correction_level(data, EcLevel::from(self.opts.ec_level)).unwrap()
+        // Render the bits into an image.
+        let image = code.render::<svg::Color>().build();
+
+        // Save the SVG to file.
+        let mut f = File::create(&path).unwrap();
+        f.write_all(image.as_bytes())
     }
 }
 
