@@ -27,7 +27,7 @@ fn get_options() -> Options {
         "e",
         "eclevel",
         &format!(
-            "set error correction level ({}, {}, {}, {}) (default: {})",
+            "error correction level ({}, {}, {}, {}) (default: {})",
             ECLevel::L,
             ECLevel::M,
             ECLevel::Q,
@@ -36,6 +36,8 @@ fn get_options() -> Options {
         ),
         "EC_LEVEL",
     );
+    opts.optopt("o", "output", "output path for the image QR code", "OUTPUT");
+    opts.optflag("t", "text", "embed the original data on the image QR code");
 
     opts.optflag("h", "help", "print this help menu");
     opts.optflag("v", "version", "print version information");
@@ -43,7 +45,7 @@ fn get_options() -> Options {
     opts
 }
 
-fn parse_options() -> QRCodeOptions {
+fn parse_options() -> (QRCodeOptions, String) {
     let opts = get_options();
     let args: Vec<String> = env::args().collect();
     let program = Path::new(&args[0]).file_name().unwrap().to_str().unwrap();
@@ -69,11 +71,21 @@ fn parse_options() -> QRCodeOptions {
         .and_then(|o| ECLevel::from_str(&o).ok())
         .unwrap_or(default_options.ec_level);
 
-    QRCodeOptions { ec_level }
+    let path = match matches.opt_str("o") {
+        Some(o) => o,
+        None => {
+            print_usage(&program, &opts);
+            exit(0);
+        }
+    };
+
+    let embed = matches.opt_present("t");
+
+    (QRCodeOptions { ec_level, embed: embed }, path)
 }
 
 fn main() {
-    let opts = parse_options();
+    let (opts, path) = parse_options();
 
     print!("Options are: {:?}", opts);
 }
