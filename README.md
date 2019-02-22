@@ -1,3 +1,3 @@
-# reed-solomon-cli
+# qrcode-cli
 
-Reed-Solomon BCH Encoder and Decoder CLI in Rust
+QRCode Encoder CLI in Rust
