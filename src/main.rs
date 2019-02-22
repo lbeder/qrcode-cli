@@ -97,7 +97,7 @@ fn parse_options() -> CLIOptions {
     let embed = matches.opt_present("t");
 
     CLIOptions {
-        opts: QRCodeOptions { ec_level, embed: embed },
+        opts: QRCodeOptions { ec_level, embed },
         data: data.as_bytes().to_vec(),
         output_path: PathBuf::from(path),
     }

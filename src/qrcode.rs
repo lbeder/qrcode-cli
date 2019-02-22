@@ -81,13 +81,13 @@ impl<'a> QRCode<'a> {
 
         // Embed the actual data.
         if self.opts.embed {
-            svg = Self::embed_text(&mut svg, &data);
+            svg = Self::embed_text(&svg, &data);
         }
 
         svg
     }
 
-    fn embed_text(svg: &String, data: &[u8]) -> String {
+    fn embed_text(svg: &str, data: &[u8]) -> String {
         // Embed the actual data.
         let mut doc = Document::from_str(&svg).unwrap();
         let mut rect = doc
@@ -129,11 +129,8 @@ impl<'a> QRCode<'a> {
         let mut root = doc.root().first_child().unwrap();
         let mut height = 0.0;
         if let Some(value) = root.attributes().get_value(AttributeId::Height) {
-            match *value {
-                AttributeValue::Length(ref len) => {
-                    height = len.num;
-                }
-                _ => {}
+            if let AttributeValue::Length(ref len) = *value {
+                height = len.num;
             }
         }
 
