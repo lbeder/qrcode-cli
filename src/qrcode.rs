@@ -190,7 +190,6 @@ mod tests {
                 let temp_image = resvg::backend_qt::render_to_image(&rtree, &opt).unwrap();
                 let temp_path = temp_file.path().to_str().unwrap();
                 temp_image.save(temp_path);
-                println!("Path is {}", temp_path);
 
                 // Use quirc to decode and verify that the data was properly encoded.
                 let image = image::open(temp_path).unwrap().to_luma();
