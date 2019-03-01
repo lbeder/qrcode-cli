@@ -3,8 +3,12 @@ rust:
   - stable
   - nightly
 cache: cargo
+before_install:
+  - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
+  - sudo apt-get update -qq
+  - sudo apt-get install qt5-default qttools5-dev-tools
 before_script:
   - rustup component add clippy
 script:
   - cargo clippy --all-targets --all-features -- -D warnings
-  - cargo test --release
+  - QT_DIR=/usr/local/opt/qt cargo test --release

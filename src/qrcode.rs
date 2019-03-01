@@ -143,7 +143,25 @@ impl<'a> QRCode<'a> {
 
 #[cfg(test)]
 mod tests {
+    extern crate image;
+    extern crate quirc;
+    extern crate tempfile;
+
     use super::*;
+    use quirc::{EccLevel, QrCoder};
+    use resvg::usvg;
+    use tempfile::Builder;
+
+    impl From<ECLevel> for EccLevel {
+        fn from(ec: ECLevel) -> Self {
+            match ec {
+                ECLevel::L => EccLevel::L,
+                ECLevel::M => EccLevel::M,
+                ECLevel::Q => EccLevel::Q,
+                ECLevel::H => EccLevel::H,
+            }
+        }
+    }
 
     #[test]
     fn test_default_options() {
@@ -157,9 +175,32 @@ mod tests {
             #[test]
             fn $name() {
                 let (options, data, expected) = $value;
+
+                // Encode the data to an SVG and check its contents.
                 let qr = QRCode::new(&options);
                 let encoded = qr.encode_svg(data.as_bytes());
                 assert_eq!(encoded, expected);
+
+                // Convert the SVG to a PNG.
+                let temp_file = Builder::new()
+                    .suffix(".png")
+                    .tempfile().unwrap();
+                let opt = resvg::Options::default();
+                let rtree = usvg::Tree::from_data(encoded.as_bytes(), &opt.usvg).unwrap();
+                let temp_image = resvg::backend_qt::render_to_image(&rtree, &opt).unwrap();
+                let temp_path = temp_file.path().to_str().unwrap();
+                temp_image.save(temp_path);
+                println!("Path is {}", temp_path);
+
+                // Use quirc to decode and verify that the data was properly encoded.
+                let image = image::open(temp_path).unwrap().to_luma();
+                let mut quirc = QrCoder::new().unwrap();
+
+                let mut codes = quirc.codes(&image, image.width(), image.height()).unwrap();
+                let code = codes.next().unwrap().unwrap();
+                assert_eq!(code.payload, data.as_bytes());
+                assert_eq!(code.ecc_level, EccLevel::from(options.ec_level));
+                assert!(codes.next().is_none());
             }
         )*
         }
