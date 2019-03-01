@@ -8,7 +8,7 @@ echo "Running clippy..."
 cargo clippy --all-targets --all-features -- -D warnings
 
 echo "Running tests..."
-cargo test --release
+QT_DIR=/usr/local/opt/qt cargo test --release
 
 echo "Building v${VERSION} for Mac OS..."
 APPLE_RELEASE="target/qrcode-cli-${VERSION}-osx.tgz"
