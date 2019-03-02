@@ -183,7 +183,7 @@ mod tests {
 
                 // TODO: At the moment, resvg is unable to render SVG with test, so we'd have to skip extended tests for
                 // this case.
-                if (options.embed) {
+                if options.embed {
                     return;
                 }
 
