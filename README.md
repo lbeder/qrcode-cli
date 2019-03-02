@@ -56,6 +56,30 @@ Now you can build it:
 CROSS_COMPILE=x86_64-linux-musl- cargo build --target=x86_64-unknown-linux-musl
 ```
 
+## Test
+
+To run the tests, you'd need to have the `qt` backend installed:
+
+For Mac OS:
+
+```bash
+brew install qt
+```
+
+For Linux (Ubuntu):
+
+```bash
+sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
+sudo apt-get update -qq
+sudo apt-get install qt5-default qttools5-dev-tools
+```
+
+You would need to pass `qt` root directory via the `QT_DIR` environment variable. For example:
+
+```bash
+QT_DIR=/usr/local/opt/qt cargo test
+```
+
 ## Example
 
 Let's see few QR code generation examples:

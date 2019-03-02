@@ -1,6 +1,6 @@
 [package]
 name = "qrcode-cli"
-version = "0.3.1"
+version = "0.3.2"
 authors = ["Leonid Beder <leonid.beder@gmail.com>"]
 edition = "2018"
 
@@ -11,3 +11,12 @@ hex = "0.3.1"
 strum = "0.13.0"
 strum_macros = "0.13.0"
 svgdom = "0.16.0"
+
+[dev-dependencies]
+quirc = "0.0.1"
+tempfile = "3.0.7"
+image = "0.19.0"
+
+[dev-dependencies.resvg]
+version = "0.5.0"
+features = ["qt-backend"]
