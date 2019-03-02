@@ -181,6 +181,12 @@ mod tests {
                 let encoded = qr.encode_svg(data.as_bytes());
                 assert_eq!(encoded, expected);
 
+                // TODO: At the moment, resvg is unable to render SVG with test, so we'd have to skip extended tests for
+                // this case.
+                if (options.embed) {
+                    return;
+                }
+
                 // Convert the SVG to a PNG.
                 let temp_file = Builder::new()
                     .suffix(".png")
