@@ -1,7 +1,7 @@
 language: rust
 rust:
   - stable
-  - nightly
+  - nightly-2019-02-08
 cache: cargo
 before_install:
   - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
