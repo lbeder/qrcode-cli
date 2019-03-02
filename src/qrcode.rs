@@ -181,7 +181,7 @@ mod tests {
                 let encoded = qr.encode_svg(data.as_bytes());
                 assert_eq!(encoded, expected);
 
-                // TODO: At the moment, resvg is unable to render SVG with test, so we'd have to skip extended tests for
+                // TODO: At the moment, resvg is unable to render SVG with text, so we'd have to skip extended tests for
                 // this case.
                 if options.embed {
                     return;
