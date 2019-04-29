@@ -5,7 +5,7 @@ VERSION=$(cargo pkgid | cut -d# -f2 | cut -d: -f2)
 rm -rf target/*.tgz target/*.tgz.asc target/release.md
 
 echo "Running clippy..."
-cargo clippy --all-targets --all-features -- -D warnings
+QT_DIR=/usr/local/opt/qt cargo clippy --all-targets --all-features -- -D warnings
 
 echo "Running tests..."
 QT_DIR=/usr/local/opt/qt cargo test --release
