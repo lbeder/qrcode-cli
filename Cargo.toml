@@ -5,18 +5,18 @@ authors = ["Leonid Beder <leonid.beder@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-getopts = "0.2"
-qrcode = "0.8"
+getopts = "0.2.19"
+qrcode = "0.10.1"
 hex = "0.3.2"
 strum = "0.15.0"
 strum_macros = "0.15.0"
-svgdom = "0.16.1"
+svgdom = "0.17.0"
 
 [dev-dependencies]
 quirc = "0.0.1"
-tempfile = "3.0.7"
-image = "0.21.1"
+tempfile = "3.1.0"
+image = "0.21.2"
 
 [dev-dependencies.resvg]
-version = "0.6.1"
+version = "0.7.0"
 features = ["qt-backend"]
