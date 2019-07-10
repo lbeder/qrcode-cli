@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.4 (2019-07-10)
+## 0.4.0 (2019-07-10)
 
 - Update crates and tests.
 
