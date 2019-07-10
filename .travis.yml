@@ -1,7 +1,7 @@
 language: rust
 rust:
   - stable
-  - nightly-2019-02-08
+  - nightly
 cache: cargo
 before_install:
   - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
@@ -10,8 +10,7 @@ before_install:
 before_script:
   - |
       if [[ "$TRAVIS_RUST_VERSION" == "nightly" ]]; then
-        rustup toolchain add nightly-2019-02-08
-        rustup component add --toolchain nightly-2019-02-08 clippy
+        rustup component add clippy --toolchain nightly-x86_64-unknown-linux-gnu
       else
         rustup component add clippy
       fi
