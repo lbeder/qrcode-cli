@@ -121,8 +121,6 @@ impl<'a> QRCode<'a> {
             .descendants()
             .find(|n| n.is_tag_name(ElementId::Path))
             .unwrap();
-
-        // Make the SVG resizable by removing its "height" attributes.
         path.set_attribute((AttributeId::Transform, Transform::new_translate(0.0, text_height)));
 
         // Resize the whole SVG accordingly.
