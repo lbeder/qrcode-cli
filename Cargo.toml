@@ -1,6 +1,6 @@
 [package]
 name = "qrcode-cli"
-version = "0.3.3"
+version = "0.4.0"
 authors = ["Leonid Beder <leonid.beder@gmail.com>"]
 edition = "2018"
 
