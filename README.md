@@ -8,7 +8,7 @@ QR Code SVG Encoder CLI
 
 ```bash
 Usage: qrcode-cli DATA [options]
-Version: 0.3.3
+Version: 0.4.0
 
 Options:
     -e, --eclevel EC_LEVEL
