@@ -126,7 +126,7 @@ impl<'a> QRCode<'a> {
         // Resize the whole SVG accordingly.
         let mut root = doc.root().first_child().unwrap();
         let mut height = 0.0;
-        if let Some(value) = root.attributes().get_value(AttributeId::Height) {
+        if let Some(value) = rect.attributes().get_value(AttributeId::Height) {
             if let AttributeValue::Length(ref len) = *value {
                 height = len.num;
             }
