@@ -6,8 +6,12 @@ mod qrcode;
 
 use crate::qrcode::{ECLevel, QRCode, QRCodeOptions};
 use getopts::Options;
-use std::str::FromStr;
-use std::{env, path::Path, path::PathBuf, process::exit};
+use std::{
+    env,
+    path::{Path, PathBuf},
+    process::exit,
+    str::FromStr,
+};
 
 pub struct CLIOptions {
     opts: QRCodeOptions,
@@ -27,7 +31,7 @@ fn print_version(program: &str) {
 }
 
 fn get_options() -> Options {
-    let default_options = QRCode::default_options();
+    let qrcode_options: QRCodeOptions = Default::default();
     let mut opts = Options::new();
     opts.optopt(
         "e",
@@ -38,12 +42,19 @@ fn get_options() -> Options {
             ECLevel::M,
             ECLevel::Q,
             ECLevel::H,
-            default_options.ec_level
+            qrcode_options.ec_level
         ),
         "EC_LEVEL",
     );
     opts.optopt("o", "output", "output path for the image QR code", "OUTPUT");
-    opts.optflag("t", "text", "embed the original data on the image QR code");
+    opts.optflag(
+        "t",
+        "text",
+        &format!(
+            "embed the original data on the image QR code (default: {})",
+            qrcode_options.embed
+        ),
+    );
 
     opts.optflag("h", "help", "print this help menu");
     opts.optflag("v", "version", "print version information");
@@ -71,11 +82,14 @@ fn parse_options() -> CLIOptions {
         exit(0);
     }
 
-    let default_options = QRCode::default_options();
-    let ec_level = matches
-        .opt_str("e")
-        .and_then(|o| ECLevel::from_str(&o).ok())
-        .unwrap_or(default_options.ec_level);
+    let mut qrcode_options: QRCodeOptions = Default::default();
+
+    if matches.opt_present("e") {
+        qrcode_options.ec_level = matches
+            .opt_str("e")
+            .and_then(|o| ECLevel::from_str(&o).ok())
+            .unwrap_or(qrcode_options.ec_level);
+    }
 
     let data = if !matches.free.is_empty() {
         matches.free[0].clone()
@@ -91,13 +105,15 @@ fn parse_options() -> CLIOptions {
             print_usage(&program, &opts);
             println!("Error: output path is missing!");
             exit(0);
-        }
+        },
     };
 
-    let embed = matches.opt_present("t");
+    if matches.opt_present("t") {
+        qrcode_options.embed = matches.opt_present("t");
+    }
 
     CLIOptions {
-        opts: QRCodeOptions { ec_level, embed },
+        opts: qrcode_options,
         data: data.as_bytes().to_vec(),
         output_path: PathBuf::from(path),
     }

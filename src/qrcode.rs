@@ -3,18 +3,28 @@ extern crate qrcode;
 extern crate strum;
 extern crate svgdom;
 
-use qrcode::render::svg;
-use qrcode::{EcLevel, QrCode};
-use std::fs::File;
-use std::io;
-use std::io::Write;
-use std::path::Path;
+use qrcode::{render::svg, EcLevel, QrCode};
+use std::{
+    default::Default,
+    fs::File,
+    io::{self, Write},
+    path::Path,
+};
 use svgdom::{AttributeId, AttributeValue, Document, ElementId, NodeType, Transform};
 
 #[derive(PartialEq, Debug)]
 pub struct QRCodeOptions {
     pub ec_level: ECLevel,
     pub embed: bool,
+}
+
+impl Default for QRCodeOptions {
+    fn default() -> Self {
+        Self {
+            ec_level: ECLevel::M,
+            embed: false,
+        }
+    }
 }
 
 #[derive(PartialEq, Debug, Display, EnumString, Copy, Clone)]
@@ -43,11 +53,6 @@ impl From<ECLevel> for EcLevel {
     }
 }
 
-const DEFAULT_OPTIONS: QRCodeOptions = QRCodeOptions {
-    ec_level: ECLevel::M,
-    embed: false,
-};
-
 pub struct QRCode<'a> {
     opts: &'a QRCodeOptions,
 }
@@ -55,10 +60,6 @@ pub struct QRCode<'a> {
 impl<'a> QRCode<'a> {
     pub fn new(opts: &'a QRCodeOptions) -> Self {
         QRCode { opts }
-    }
-
-    pub fn default_options() -> &'static QRCodeOptions {
-        &DEFAULT_OPTIONS
     }
 
     pub fn encode(&self, data: &[u8], path: &Path) -> Result<(), io::Error> {
@@ -159,12 +160,6 @@ mod tests {
                 ECLevel::H => EccLevel::H,
             }
         }
-    }
-
-    #[test]
-    fn test_default_options() {
-        let default_options = QRCode::default_options();
-        assert_eq!(default_options, &DEFAULT_OPTIONS);
     }
 
     macro_rules! encode_svg_tests {
