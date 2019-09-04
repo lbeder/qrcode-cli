@@ -12,6 +12,7 @@ use std::{
     process::exit,
     str::FromStr,
 };
+use svgdom::Color;
 
 pub struct CLIOptions {
     opts: QRCodeOptions,
@@ -32,7 +33,9 @@ fn print_version(program: &str) {
 
 fn get_options() -> Options {
     let qrcode_options: QRCodeOptions = Default::default();
+
     let mut opts = Options::new();
+    opts.optopt("o", "output", "output path for the QR code image", "OUTPUT");
     opts.optopt(
         "e",
         "eclevel",
@@ -46,12 +49,17 @@ fn get_options() -> Options {
         ),
         "EC_LEVEL",
     );
-    opts.optopt("o", "output", "output path for the image QR code", "OUTPUT");
+    opts.optopt(
+        "c",
+        "color",
+        &format!("color of a module (default: \"{}\")", qrcode_options.color),
+        "COLOR",
+    );
     opts.optflag(
         "t",
         "text",
         &format!(
-            "embed the original data on the image QR code (default: {})",
+            "embed the original data on the QR code image (default: {})",
             qrcode_options.embed
         ),
     );
@@ -105,11 +113,18 @@ fn parse_options() -> CLIOptions {
             print_usage(&program, &opts);
             println!("Error: output path is missing!");
             exit(0);
-        },
+        }
     };
 
     if matches.opt_present("t") {
         qrcode_options.embed = matches.opt_present("t");
+    }
+
+    if matches.opt_present("c") {
+        qrcode_options.color = matches
+            .opt_str("c")
+            .and_then(|o| Color::from_str(&o).ok())
+            .unwrap_or(qrcode_options.color);
     }
 
     CLIOptions {

@@ -8,15 +8,18 @@ QR Code SVG Encoder CLI
 
 ```bash
 Usage: qrcode-cli DATA [options]
-Version: 0.4.0
+Version: 0.5.0
 
 Options:
+    -o, --output OUTPUT output path for the QR code image
     -e, --eclevel EC_LEVEL
                         error correction level (L, M, Q, H) (default: M)
-    -o, --output OUTPUT output path for the image QR code
-    -t, --text          embed the original data on the image QR code
+    -c, --color COLOR   color of a module (default: "#000000")
+    -t, --text          embed the original data on the QR code image (default:
+                        false)
     -h, --help          print this help menu
     -v, --version       print version information
+
 ```
 
 ## Build
@@ -86,7 +89,7 @@ Let's see few QR code generation examples:
 
 To encode `Hello World` using the `L` (up to ~7% damage):
 
-> ./target/release/qrcode-cli --output images/example1.svg --eclevel L "Hello World"
+> ./target/release/qrcode-cli -o images/example1.svg -e L "Hello World"
 
 <div align="center">
   <img alt="example1" src="images/example1.svg" />
@@ -94,7 +97,7 @@ To encode `Hello World` using the `L` (up to ~7% damage):
 
 To encode `Hello World` using the `H` (up to ~30% damage) with the embedding of the original data:
 
-> ./target/release/qrcode-cli --output images/example2.svg --eclevel H --text "Hello World"
+> ./target/release/qrcode-cli -o images/example2.svg -e H -t "Hello World"
 
 <div align="center">
   <img alt="example2" src="images/example2.svg" />
@@ -102,10 +105,18 @@ To encode `Hello World` using the `H` (up to ~30% damage) with the embedding of 
 
 To encode a long message `Hello World` using the `H` (up to ~30% damage) with the embedding of the original data:
 
-> ./target/release/qrcode-cli --output images/example3.svg --eclevel H --text "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+> ./target/release/qrcode-cli -o images/example3.svg -e H -t "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
 <div align="center">
   <img alt="example3" src="images/example3.svg" />
+</div>
+
+To encode `Hello World` and render the QR code image in a different color:
+
+> ./target/release/qrcode-cli -o images/example4.svg -c "#FF0000" "Hello World"
+
+<div align="center">
+  <img alt="example4" src="images/example4.svg" />
 </div>
 
 ## License
