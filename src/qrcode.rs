@@ -94,13 +94,13 @@ impl<'a> QRCode<'a> {
 
         // Embed the actual data.
         if self.opts.embed {
-            svg = Self::embed_text(&svg, &data, &self.opts.color);
+            svg = Self::embed_text(&svg, &data, self.opts.color);
         }
 
         svg
     }
 
-    fn embed_text(svg: &str, data: &[u8], color: &Color) -> String {
+    fn embed_text(svg: &str, data: &[u8], color: Color) -> String {
         // Embed the actual data.
         let mut doc = Document::from_str(&svg).unwrap();
         let mut rect = doc
