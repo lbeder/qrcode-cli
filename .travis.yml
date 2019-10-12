@@ -1,7 +1,6 @@
 language: rust
 rust:
   - stable
-  - nightly
 cache: cargo
 before_install:
   - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
@@ -10,10 +9,7 @@ before_install:
 before_script:
   - cargo install --force cargo-audit
   - cargo generate-lockfile
-  - |
-      if [[ "$TRAVIS_RUST_VERSION" != "nightly" ]]; then
-        rustup component add clippy
-      fi
+  - rustup component add clippy
 script:
   - cargo audit
   - cargo clippy --all-targets --all-features -- -D warnings
