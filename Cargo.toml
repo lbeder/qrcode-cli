@@ -1,21 +1,21 @@
 [package]
 name = "qrcode-cli"
-version = "0.5.0"
+version = "0.6.0"
 authors = ["Leonid Beder <leonid.beder@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-getopts = "0.2.19"
-qrcode = "0.10.1"
-strum = "0.15.0"
-strum_macros = "0.15.0"
-svgdom = "0.17.0"
+getopts = "0.2.21"
+qrcode = "0.11.0"
+strum = "0.16.0"
+strum_macros = "0.16.0"
+svgdom = "0.18.0"
 
 [dev-dependencies]
 quirc = "0.0.1"
 tempfile = "3.1.0"
-image = "0.21.2"
+image = "0.22.3"
 
 [dev-dependencies.resvg]
-version = "0.7.0"
+version = "0.8.0"
 features = ["qt-backend"]
