@@ -106,7 +106,7 @@ impl<'a> QRCode<'a> {
         let mut rect = doc
             .root()
             .descendants()
-            .find(|n| n.is_tag_name(ElementId::Rect))
+            .find(|n| n.has_tag_name(ElementId::Rect))
             .unwrap();
 
         let mut el = doc.create_element(ElementId::Text);
@@ -134,7 +134,7 @@ impl<'a> QRCode<'a> {
         let mut path = doc
             .root()
             .descendants()
-            .find(|n| n.is_tag_name(ElementId::Path))
+            .find(|n| n.has_tag_name(ElementId::Path))
             .unwrap();
         path.set_attribute((AttributeId::Transform, Transform::new_translate(0.0, text_height)));
 
