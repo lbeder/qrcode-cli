@@ -33,8 +33,6 @@ cd qrcode-cli
 cargo build --release
 ```
 
-### Linux x86_x64
-
 To get stuff working later, use the `nightly` branch of Rust:
 
 ```bash
