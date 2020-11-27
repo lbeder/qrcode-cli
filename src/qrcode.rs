@@ -128,7 +128,7 @@ impl<'a> QRCode<'a> {
             el.append(tspan);
         }
 
-        rect.insert_after(el.clone());
+        rect.insert_after(el);
 
         // Move the actual QR code below the text.
         let mut path = doc
@@ -165,7 +165,6 @@ mod tests {
 
     use super::*;
     use quirc::{EccLevel, QrCoder};
-    use usvg;
     use tempfile::Builder;
 
     impl From<ECLevel> for EccLevel {
