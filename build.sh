@@ -6,10 +6,10 @@ echo "Running audit..."
 cargo audit
 
 echo "Running clippy..."
-QT_DIR=/usr/local/opt/qt cargo clippy --all-targets --all-features -- -D warnings
+cargo clippy --all-targets --all-features -- -D warnings
 
 echo "Running tests..."
-QT_DIR=/usr/local/opt/qt cargo test --release
+cargo test --release
 
 echo "Building v${VERSION} for Mac OS..."
 cargo build --release --target=x86_64-apple-darwin
