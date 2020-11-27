@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0 (2020-11-27)
+
+- Update dependencies and remove the requirement for QT.
+
 ## 0.4.0 (2019-07-10)
 
 - Update crates and tests.
