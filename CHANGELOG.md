@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.7.0 (2020-11-27)
+## 0.7.0 (2020-12-05)
 
 - Update dependencies and remove the requirement for QT.
 
