@@ -128,7 +128,7 @@ impl<'a> QRCode<'a> {
             el.append(tspan);
         }
 
-        rect.insert_after(el.clone());
+        rect.insert_after(el);
 
         // Move the actual QR code below the text.
         let mut path = doc
@@ -165,7 +165,6 @@ mod tests {
 
     use super::*;
     use quirc::{EccLevel, QrCoder};
-    use resvg::usvg;
     use tempfile::Builder;
 
     impl From<ECLevel> for EccLevel {
@@ -195,14 +194,14 @@ mod tests {
                 let temp_file = Builder::new()
                     .suffix(".png")
                     .tempfile().unwrap();
-                let opt = resvg::Options::default();
-                let rtree = usvg::Tree::from_data(encoded.as_bytes(), &opt.usvg).unwrap();
-                let temp_image = resvg::backend_qt::render_to_image(&rtree, &opt).unwrap();
+                let opt = usvg::Options::default();
+                let rtree = usvg::Tree::from_data(encoded.as_bytes(), &opt).unwrap();
+                let temp_image = resvg::render(&rtree, usvg::FitTo::Original, None).unwrap();
                 let temp_path = temp_file.path().to_str().unwrap();
-                temp_image.save(temp_path);
+                temp_image.save_png(temp_path).unwrap();
 
                 // Use quirc to decode and verify that the data was properly encoded.
-                let image = image::open(temp_path).unwrap().to_luma();
+                let image = image::open(temp_path).unwrap().to_luma8();
                 let mut quirc = QrCoder::new().unwrap();
 
                 let mut codes = quirc.codes(&image, image.width(), image.height()).unwrap();
