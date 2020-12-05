@@ -54,7 +54,7 @@ brew install FiloSottile/musl-cross/musl-cross
 Now you can build it:
 
 ```bash
-CROSS_COMPILE=x86_64-linux-musl- cargo build --target=x86_64-unknown-linux-musl
+CROSS_COMPILE=x86_64-linux-musl cargo build --target=x86_64-unknown-linux-musl
 ```
 
 ## Test
