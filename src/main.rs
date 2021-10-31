@@ -77,16 +77,16 @@ fn parse_options() -> CLIOptions {
 
     let matches = match opts.parse(&args[1..]) {
         Ok(m) => m,
-        Err(f) => panic!(f.to_string()),
+        Err(f) => panic!("{}", f.to_string()),
     };
 
     if matches.opt_present("v") {
-        print_version(&program);
+        print_version(program);
         exit(0);
     }
 
     if matches.opt_present("h") {
-        print_usage(&program, &opts);
+        print_usage(program, &opts);
         exit(0);
     }
 
@@ -102,7 +102,7 @@ fn parse_options() -> CLIOptions {
     let data = if !matches.free.is_empty() {
         matches.free[0].clone()
     } else {
-        print_usage(&program, &opts);
+        print_usage(program, &opts);
         println!("Error: data is missing!");
         exit(0);
     };
@@ -110,7 +110,7 @@ fn parse_options() -> CLIOptions {
     let path = match matches.opt_str("o") {
         Some(o) => o,
         None => {
-            print_usage(&program, &opts);
+            print_usage(program, &opts);
             println!("Error: output path is missing!");
             exit(0);
         }

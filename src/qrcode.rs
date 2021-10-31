@@ -94,15 +94,15 @@ impl<'a> QRCode<'a> {
 
         // Embed the actual data.
         if self.opts.embed {
-            svg = Self::embed_text(&svg, &data, self.opts.color);
+            svg = Self::embed_text(&svg, data, self.opts.color).unwrap();
         }
 
         svg
     }
 
-    fn embed_text(svg: &str, data: &[u8], color: Color) -> String {
+    fn embed_text(svg: &str, data: &[u8], color: Color) -> Result<String, &'static str> {
         // Embed the actual data.
-        let mut doc = Document::from_str(&svg).unwrap();
+        let mut doc = Document::from_str(svg).unwrap();
         let mut rect = doc
             .root()
             .descendants()
@@ -140,10 +140,14 @@ impl<'a> QRCode<'a> {
 
         // Resize the whole SVG accordingly.
         let mut height = 0.0;
-        if let Some(value) = rect.attributes().get_value(AttributeId::Height) {
-            if let AttributeValue::Length(ref len) = *value {
-                height = len.num;
+        match rect.attributes().get_value(AttributeId::Height) {
+            Some(value) => {
+                if let AttributeValue::Length(ref len) = *value {
+                    height = len.num;
+                }
             }
+
+            None => return Err("Invalid height"),
         }
 
         // Remove the "viewBox" attribute, since it's now longer needed to control the size of the SVG.
@@ -153,7 +157,7 @@ impl<'a> QRCode<'a> {
         rect.set_attribute((AttributeId::Height, height + text_height));
         root.set_attribute((AttributeId::Height, height + text_height));
 
-        doc.to_string()
+        Ok(doc.to_string())
     }
 }
 
@@ -195,10 +199,12 @@ mod tests {
                     .suffix(".png")
                     .tempfile().unwrap();
                 let opt = usvg::Options::default();
-                let rtree = usvg::Tree::from_data(encoded.as_bytes(), &opt).unwrap();
-                let temp_image = resvg::render(&rtree, usvg::FitTo::Original, None).unwrap();
+                let rtree = usvg::Tree::from_data(encoded.as_bytes(), &opt.to_ref()).unwrap();
+                let pixmap_size = rtree.svg_node().size.to_screen_size();
+                let mut pixmap = tiny_skia::Pixmap::new(pixmap_size.width(), pixmap_size.height()).unwrap();
+                resvg::render(&rtree, usvg::FitTo::Original, pixmap.as_mut()).unwrap();
                 let temp_path = temp_file.path().to_str().unwrap();
-                temp_image.save_png(temp_path).unwrap();
+                pixmap.save_png(temp_path).unwrap();
 
                 // Use quirc to decode and verify that the data was properly encoded.
                 let image = image::open(temp_path).unwrap().to_luma8();
