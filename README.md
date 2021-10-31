@@ -8,7 +8,7 @@ QR Code SVG Encoder CLI
 
 ```bash
 Usage: qrcode-cli DATA [options]
-Version: 0.5.0
+Version: 0.8.0
 
 Options:
     -o, --output OUTPUT output path for the QR code image
