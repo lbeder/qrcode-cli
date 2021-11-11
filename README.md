@@ -1,6 +1,6 @@
 # qrcode-cli
 
-[![Build Status](https://github.com/lbeder/qrcode-cli/contracts/actions/workflows/ci.yml/badge.svg)](https://github.com/lbeder/qrcode-cli/contracts/actions/workflows/ci.yml)
+[![Build Status](https://github.com/lbeder/qrcode-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/lbeder/qrcode-cli/actions/workflows/ci.yml)
 
 QR Code SVG Encoder CLI
 
