@@ -78,7 +78,7 @@ impl<'a> QRCode<'a> {
         let svg = self.encode_svg(data);
 
         // Save the SVG to file.
-        let mut f = File::create(&path).unwrap();
+        let mut f = File::create(path).unwrap();
         f.write_all(svg.as_bytes())
     }
 

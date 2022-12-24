@@ -23,12 +23,12 @@ pub struct CLIOptions {
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 fn print_usage(program: &str, opts: &Options) {
-    let brief = format!("Usage: {} DATA [options]\nVersion: {}", program, VERSION);
+    let brief = format!("Usage: {program} DATA [options]\nVersion: {VERSION}");
     println!("{}", opts.usage(&brief));
 }
 
 fn print_version(program: &str) {
-    println!("{} v{}", program, VERSION);
+    println!("{program} v{VERSION}");
 }
 
 fn get_options() -> Options {
