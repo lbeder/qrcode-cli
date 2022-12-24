@@ -38,7 +38,7 @@ impl Default for QRCodeOptions {
     }
 }
 
-#[derive(PartialEq, Debug, Display, EnumString, Copy, Clone)]
+#[derive(PartialEq, Eq, Debug, Display, EnumString, Copy, Clone)]
 pub enum ECLevel {
     L = 0,
     M = 1,
