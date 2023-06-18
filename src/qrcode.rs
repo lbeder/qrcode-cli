@@ -145,7 +145,7 @@ impl<'a> QRCode<'a> {
                 if let AttributeValue::Length(ref len) = *value {
                     height = len.num;
                 }
-            }
+            },
 
             None => return Err("Invalid height"),
         }

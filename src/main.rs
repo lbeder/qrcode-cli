@@ -113,7 +113,7 @@ fn parse_options() -> CLIOptions {
             print_usage(program, &opts);
             println!("Error: output path is missing!");
             exit(0);
-        }
+        },
     };
 
     if matches.opt_present("t") {
